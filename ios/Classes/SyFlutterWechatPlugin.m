@@ -18,7 +18,8 @@
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"register" isEqualToString:call.method]) {
-      BOOL res = [WXApi registerApp:call.arguments[@"appId"]];
+      //BOOL res = [WXApi registerApp:call.arguments[@"appId"]];
+      BOOL res = [WXApi registerApp:call.arguments[@"appId"] universalLink:@""];
       result(@((bool)res));
   }else if ([@"shareText" isEqualToString:call.method]) {
       [self shareText:call result:result];
@@ -40,8 +41,11 @@
     req.text = call.arguments[@"text"];
     req.bText = YES;
     req.scene = [self _convertShareType:call];
-    BOOL res = [WXApi sendReq:req];
-    result(@((bool)res));
+    //BOOL res = [WXApi sendReq:req];
+    //result(@((bool)res));
+      [WXApi sendReq:req completion:^(BOOL success) {
+        result(@((bool)success));
+    }];
 }
 
 - (void)shareImage:(FlutterMethodCall*)call result:(FlutterResult)result{
@@ -62,8 +66,11 @@
     req.message = mediaMsg;
     req.bText = NO;
     req.scene = [self _convertShareType:call];
-    BOOL res = [WXApi sendReq:req];
-    result(@((bool)res));
+    //BOOL res = [WXApi sendReq:req];
+    //result(@((bool)res));
+      [WXApi sendReq:req completion:^(BOOL success) {
+        result(@((bool)success));
+    }];
 }
 
 - (void)shareWebPage:(FlutterMethodCall*)call result:(FlutterResult)result{
@@ -86,8 +93,11 @@
     req.message = mediaMsg;
     req.bText = NO;
     req.scene = [self _convertShareType:call];
-    BOOL res = [WXApi sendReq:req];
-    result(@((bool)res));
+    //BOOL res = [WXApi sendReq:req];
+    //result(@((bool)res));
+    [WXApi sendReq:req completion:^(BOOL success) {
+        result(@((bool)success));
+    }];
 }
 
 //支付
@@ -99,7 +109,8 @@
     req.nonceStr= call.arguments[@"noncestr"];
     req.timeStamp= [call.arguments[@"timestamp"] unsignedIntValue];
     req.sign= call.arguments[@"sign"];
-    [WXApi sendReq:req];
+    //[WXApi sendReq:req];
+    [WXApi sendReq:req completion:nil];
 }
 
 
